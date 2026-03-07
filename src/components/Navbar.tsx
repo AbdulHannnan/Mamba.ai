@@ -1,16 +1,18 @@
-import { MenuIcon, XIcon } from 'lucide-react';
+import { Link, MenuIcon, XIcon } from 'lucide-react';
 import { PrimaryButton } from './Buttons';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { Links, NavLink } from 'react-router-dom';
+import { assets } from '../assets/assets';
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
 
     const navLinks = [
         { name: 'Home', href: '/#' },
-        { name: 'Features', href: '/#features' },
-        { name: 'Pricing', href: '/#pricing' },
-        { name: 'FAQ', href: '/#faq' },
+        { name: 'Create', href: '/generate' },
+        { name: 'Community', href: '/community' },
+        { name: 'Plans', href: '/plans' },
     ];
 
     return (
@@ -21,15 +23,15 @@ export default function Navbar() {
             transition={{ type: "spring", stiffness: 250, damping: 70, mass: 1 }}
         >
             <div className='max-w-6xl mx-auto flex items-center justify-between bg-black/50 backdrop-blur-md border border-white/4 rounded-2xl p-3'>
-                <a href='/#'>
-                    <img src='/logo.svg' alt="logo" className="h-8" />
-                </a>
+                <NavLink to={"/"} onClick={() => scrollTo(0,0)}>
+                    <img src={assets.logo} alt="logo" className="h-8" />
+                </NavLink>
 
                 <div className='hidden md:flex items-center gap-8 text-sm font-medium text-gray-300'>
                     {navLinks.map((link) => (
-                        <a href={link.href} key={link.name} className="hover:text-white transition">
+                        <NavLink onClick={() => scrollTo(0,0)} to={link.href} key={link.name} className="hover:text-white transition">
                             {link.name}
-                        </a>
+                        </NavLink>
                     ))}
                 </div>
 
