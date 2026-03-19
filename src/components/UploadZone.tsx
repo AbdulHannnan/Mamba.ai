@@ -1,3 +1,4 @@
+import { UploadIcon } from "lucide-react"
 import type { UploadZoneProps } from "../types"
 
 const UploadZone = ({label , file , onClear , onChange} : UploadZoneProps) => {
@@ -17,12 +18,19 @@ const UploadZone = ({label , file , onClear , onChange} : UploadZoneProps) => {
             </div>
 
             <div className="absolute bottom-4 left-4 right-4 bg-black/50 backdrop-blur-md p-3 rounded-lg border border-white/10 ">
-                <p className="text-white text-lg font-semibold">{file.name}</p>
+                <p className="text-white text-lg font-semibold truncate ">{file.name}</p>
             </div>
 
             </>
         ): (
-            <></>
+            <>
+                <div className= "h-12 w-12 rounded-full bg-white/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 "> 
+                <UploadIcon  className="w-8 h-8 text-gray-400 group-hover:text-voilet-400 transition-colors " />
+                </div>
+                <h3 className = "text-lg font-semibold mb-2 ">{label}</h3>
+                <p className = " text-sm text-gray-400 text-center max-w-[200px] "> Drag and drop your file here or click to Upload</p>
+                <input type="file" accept="image/*" onChange={onChange} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
+            </>
         )}
         
         </div>

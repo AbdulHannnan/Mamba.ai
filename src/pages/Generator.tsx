@@ -1,4 +1,6 @@
 import Title from "../components/Title"
+import UploadZone from "../components/UploadZone"
+
 
 const Generator = () => {
   return (
@@ -11,8 +13,7 @@ const Generator = () => {
         {/* left column */}
               <div className="flex flex-col w-full sm:max-w-60 gap-8 mt-8 mb-12">
              
-                <p>Product Image </p>
-                <p>Model Image </p>
+            <UploadZone label=" Product Image" file={} onClear={} onChange={}/>
                 
                 </div>
 
