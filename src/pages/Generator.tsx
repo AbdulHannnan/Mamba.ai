@@ -3,6 +3,8 @@ import UploadZone from "../components/UploadZone"
 
 
 const Generator = () => {
+
+  const [name , setname ] = useState('')
   return (
     <div className="min-h-screen text-white p-6 md-12 mt-22">
       <form className="max-w-4xl mx-auto mb-40">
