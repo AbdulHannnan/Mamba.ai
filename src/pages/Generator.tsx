@@ -4,7 +4,23 @@ import UploadZone from "../components/UploadZone"
 
 const Generator = () => {
 
-  const [name , setname ] = useState('')
+  ocnst [name , setname ] = useState('')
+  const [productName , setproductName ] = useState('')
+  const [productDescription , setproductDescription ] = useState('')
+  const [AspectRatio , setAspectRatio ] = useState('9:16')
+  const [ProductImage , setProductImage ] = useState<Fil | null >(null)
+  const [ModelImage , setModelImage ] = useState<Fil | null >(null)
+    ocnst [userPrompt , setuserPrompt ] = useState('')
+    ocnst [isGenerating , setisGenerating ] = useState(false)
+
+    const handleFileChange = (e : React.ChangeEvent<HTMLInputElement> , type : 'product' | 'model') =>{
+      if(e.target.files && e.target.files.length[0]){
+        if(type === 'product') setProductImage(e.target.files[0]);
+        else setModelImage(e.target.files[0]);
+        {
+
+    }
+
   return (
     <div className="min-h-screen text-white p-6 md-12 mt-22">
       <form className="max-w-4xl mx-auto mb-40">
