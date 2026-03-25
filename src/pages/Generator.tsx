@@ -53,7 +53,26 @@ const Generator = () => {
           </div>
 
           {/* right column */}
-          <div><p>Right </p></div>
+          <div className="w-full">
+            <div className="mb-4 ">
+              <label htmlFor="name" className="block text-sm mb-4">Prodject Name</label>
+              <input type="text"  id="name" value={name} onCanPlay={(e)=> setname(e.target.value)} placeholder="Name your Project" required className="w-full bg-white/3 rounded-lg border-2 p-4 text-sm border-voilet-200/10 focus:border-voilet-500/50 outline-none transition-all"/>
+            </div>
+
+          <div className="mb-4 text-gray-300">
+              <label htmlFor="productName" className="block text-sm mb-4">Product Name</label>
+              <input type="text"  id="productName" value={productName} onCanPlay={(e)=> setproductName(e.target.value)} placeholder="Enter the Name of Product" required className="w-full bg-white/3 rounded-lg border-2 p-4 text-sm border-voilet-200/10 focus:border-voilet-500/50 outline-none transition-all"/>
+            </div>
+
+
+             <div className="mb-4 text-gray-300">
+              <label htmlFor="productDescription" className="block text-sm mb-4">Product Description <span className="text-xs text-violet-400">optional</span></label>
+              <textarea  id="productDescription" rows={4} value={productDescription} onChange={(e)=> setproductDescription(e.target.value)} placeholder="Enter the Description of the Product" className="w-full bg-white/3 rounded-lg border-2 p-4 text-sm border-voilet-200/10 focus:border-voilet-500/50 outline-none resize-none transition-all"/>
+
+            </div>
+
+
+            </div>
         </div>
       </form>
     </div>
