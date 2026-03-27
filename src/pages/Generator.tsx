@@ -1,8 +1,9 @@
 import React, { useState } from "react"; // Added useState import
 import Title from "../components/Title";
 import UploadZone from "../components/UploadZone";
-import { RectangleVerticalIcon } from "lucide-react";
+import {  Loader2Icon, RectangleVerticalIcon, Wand2Icon } from "lucide-react";
 import { RectangleHorizontalIcon } from "lucide-react";
+import { PrimaryButton } from "../components/Buttons";
 
 const Generator = () => {
   // Fixed typos from 'ocnst' to 'const'
@@ -56,7 +57,7 @@ const Generator = () => {
 
           {/* right column */}
           <div className="w-full">
-            <div className="mb-4 ">
+            <div className="mb-4 text-gray-300">
               <label htmlFor="name" className="block text-sm mb-4">Prodject Name</label>
               <input type="text"  id="name" value={name} onCanPlay={(e)=> setname(e.target.value)} placeholder="Name your Project" required className="w-full bg-white/3 rounded-lg border-2 p-4 text-sm border-voilet-200/10 focus:border-voilet-500/50 outline-none transition-all"/>
             </div>
@@ -84,12 +85,17 @@ const Generator = () => {
 
 
                <div className="mb-4 text-gray-300">
-              <label htmlFor="productDescription" className="block text-sm mb-4">Product Description <span className="text-xs text-violet-400">optional</span></label>
-              <textarea  id="productDescription" rows={4} value={productDescription} onChange={(e)=> setproductDescription(e.target.value)} placeholder="Enter the Description of the Product" className="w-full bg-white/3 rounded-lg border-2 p-4 text-sm border-voilet-200/10 focus:border-voilet-500/50 outline-none resize-none transition-all"/>
+              <label htmlFor="userPrompt" className="block text-sm mb-4">User Prompt  <span className="text-xs text-violet-400">optional</span></label>
+              <textarea  id="userPrompt" rows={4} value={userPrompt} onChange={(e)=> setuserPrompt(e.target.value)} placeholder="Describte the image you want to be" className="w-full bg-white/3 rounded-lg border-2 p-4 text-sm border-voilet-200/10 focus:border-voilet-500/50 outline-none resize-none transition-all"/>
             </div>
 
             </div>
         </div>
+
+        <div className="flex justify-center  mt-10">
+          <PrimaryButton disabled={isGenerating} className="px-10 py-3 rounded-md disabled:opacity-70 disabled:cursor-not-allowed"> {isGenerating ? (<><Loader2Icon className="size-5 animate-spin"/>Generating...</>) : (<> <Wand2Icon className="size-5" /> Generate Image </>)} </PrimaryButton>
+        </div>
+
       </form>
     </div>
   );
