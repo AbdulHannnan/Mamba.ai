@@ -1,6 +1,8 @@
 import React, { useState } from "react"; // Added useState import
 import Title from "../components/Title";
 import UploadZone from "../components/UploadZone";
+import { RectangleVerticalIcon } from "lucide-react";
+import { RectangleHorizontalIcon } from "lucide-react";
 
 const Generator = () => {
   // Fixed typos from 'ocnst' to 'const'
@@ -68,9 +70,23 @@ const Generator = () => {
              <div className="mb-4 text-gray-300">
               <label htmlFor="productDescription" className="block text-sm mb-4">Product Description <span className="text-xs text-violet-400">optional</span></label>
               <textarea  id="productDescription" rows={4} value={productDescription} onChange={(e)=> setproductDescription(e.target.value)} placeholder="Enter the Description of the Product" className="w-full bg-white/3 rounded-lg border-2 p-4 text-sm border-voilet-200/10 focus:border-voilet-500/50 outline-none resize-none transition-all"/>
-
             </div>
 
+
+            <div className="mb-4 text-gray-300">
+              <label className="block text-sm mb-4">Aspect Ratio</label>
+              <div className="flex gap-3">
+               <RectangleVerticalIcon onClick={()=> setAspectRatio(`9:16`)} className={`p-2.5 sie-13 bg-white/6 rounded transition-all ring-2 ring-transparent cursor-pointer ${AspectRatio === '9:16' ? 'ring-violet-500/50 bg-white/10 ' : ''}`} />
+
+                <RectangleHorizontalIcon onClick={()=> setAspectRatio(`16:9`)} className={`p-2.5 sie-13 bg-white/6 rounded transition-all ring-2 ring-transparent cursor-pointer ${AspectRatio === '16:9' ? 'ring-violet-500/50 bg-white/10 ' : ''}`} />
+              </div>
+            </div>
+
+
+               <div className="mb-4 text-gray-300">
+              <label htmlFor="productDescription" className="block text-sm mb-4">Product Description <span className="text-xs text-violet-400">optional</span></label>
+              <textarea  id="productDescription" rows={4} value={productDescription} onChange={(e)=> setproductDescription(e.target.value)} placeholder="Enter the Description of the Product" className="w-full bg-white/3 rounded-lg border-2 p-4 text-sm border-voilet-200/10 focus:border-voilet-500/50 outline-none resize-none transition-all"/>
+            </div>
 
             </div>
         </div>
