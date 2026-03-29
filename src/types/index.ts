@@ -31,5 +31,6 @@ export interface Project {
     error?: String;
     createdAt?: Date | String;
     updatedAt?: Date | String;
+    uploadImages: string[];
 
 }
