@@ -29,7 +29,7 @@ const Community = () => {
 
         <header className='mb-12'>
           <h1 className='text-3xl md:text-4xl font-semibold mb-4'>Community</h1>
-          <p className='text-gray-400'>This is community page</p>
+          <p className='text-gray-400'>This is community page that are build with Full Stack Software Engineer Abdul Hannan </p>
         </header>
 
         {/* projectlist */}
