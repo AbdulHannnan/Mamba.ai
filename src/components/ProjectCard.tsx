@@ -17,7 +17,7 @@ function ProjectCard({gen , setGen , forComunity = false } : {gen : Project , se
         
         {/* preview */}
 
-        <div className={`${gen?. aspectRatio ==='9:17' ? `aspect-9/16` : `aspect-video`} relative overdlow-hidden `}>
+        <div className={`${gen?. aspectRatio ==='9:16' ? `aspect-9/16` : `aspect-video`} relative overflow-hidden `}>
 
             {gen.generatedImage && ( <img src={gen.generatedImage} alt={gen.productName} className={`absolute insert-0 w-full object-cover transition duration-500 ${gen.generatedVideo ? 'hover:opacity-0' : 'group-hover:scale-105'}`} /> )}
 
