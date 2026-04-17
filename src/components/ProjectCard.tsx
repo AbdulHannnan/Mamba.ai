@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom"
 import { useState } from "react";
 // DELETED: import { img } from "framer-motion/client"; (Used standard <img> tag instead)
 import { Loader2Icon } from "lucide-react";
+import { div } from "framer-motion/client";
 
 function ProjectCard({ gen, setGen, forComunity = false }: { gen: Project, setGen: React.Dispatch<React.SetStateAction<Project[]>>, forComunity?: boolean }) {
 
@@ -86,9 +87,36 @@ function ProjectCard({ gen, setGen, forComunity = false }: { gen: Project, setGe
 
                 {/* 5. Details Section (Simplified for display) */}
                 <div className="p-3">
-                    <h3 className="text-white text-sm font-medium truncate">{gen.productName}</h3>
+                    <div className="flex items-start justify-between gap-4">
+                        <div className="flex-1">
+                    <h3 className="font-medium text-lg mb-1">{gen.productName}</h3>
+                    <p className="text-sm text-gray-400">Created : {new Date(gen.createdAt).toLocaleDateString()}</p>
+                    {gen.updatedAt && (
+                        <p className="text-xs text-gray-500 mt-1">Updated : {new Date(gen.updatedAt).toLocaleDateString()}</p>
+                    )}
                 </div>
-                
+
+                    <div className="text-right ">
+                        <div className="mt-2 flex flex-col items-end gap-1">
+                            <span className="text-xs text-white px-2 py-1 bg-white/5 rounded-full">Aspect : {gen.aspectRatio}</span>
+                        </div>
+                    </div>
+               </div>
+
+                        {/* Product Description */}
+                        {gen.productDescription && (
+                            <div className="mt-2">
+                                <p className="text-xs text-gray-500 mb-1">Description </p>
+                                <div className="text-sm text-gray-300 bg-white/3 p-2 rounded-md wrap-break-word ">{gen.productDescription}</div>
+                            </div>
+                        )}
+
+
+                        {/* USer Prompt */}
+
+                        
+
+                </div>
             </div> 
         </div>
     )
