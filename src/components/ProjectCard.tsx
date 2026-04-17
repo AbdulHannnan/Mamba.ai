@@ -114,7 +114,12 @@ function ProjectCard({ gen, setGen, forComunity = false }: { gen: Project, setGe
 
                         {/* USer Prompt */}
 
-                        
+                          {gen.userPrompt && (
+                            <div className="mt-2">
+                               
+                                  <div className="text-xs text-gray-300">{gen.userPrompt}</div>
+                            </div>
+                        )}
 
                 </div>
             </div> 
