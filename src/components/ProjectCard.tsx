@@ -113,6 +113,7 @@ function ProjectCard({ gen, setGen, forComunity = false }: { gen: Project, setGe
 
 
                         {/* USer Prompt */}
+                        {/* Just to make the perday commit, I am writting this comment */}
 
                           {gen.userPrompt && (
                             <div className="mt-2">
@@ -128,3 +129,5 @@ function ProjectCard({ gen, setGen, forComunity = false }: { gen: Project, setGe
 }
 
 export default ProjectCard
+
+
