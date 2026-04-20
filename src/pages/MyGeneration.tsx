@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import {dummyGenerations} from "../assets/assets"
 import { Loader2Icon } from 'lucide-react';
 import ProjectCard from '../components/ProjectCard';
+import { PrimaryButton } from "../components/Buttons";
 
 const MyGeneration = () => {
 
@@ -36,6 +37,15 @@ const MyGeneration = () => {
           {Generation.map((gen) => ( <div> <ProjectCard key={gen.id} gen={gen}  setGeneration={setGeneration}/>
            </div>))}
         </div>
+
+            {Generation.length == 0 &&(
+              <div className="text-center py-20 bg-white/5 rounded-xl border border-white/10 ">
+                <h3 className="text-xl font-medium mb-2"> No Gernation Yet </h3>
+                <p className="text-gray-400 mb-6 ">There is no Generation Cuurrently </p>
+                <PrimaryButton onClick={()=> window.location.href = '/generate'}>Create new Generations </PrimaryButton>
+              </div>
+            )}
+
       </div>
     </div>
   )

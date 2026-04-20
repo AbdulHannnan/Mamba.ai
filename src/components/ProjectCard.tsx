@@ -3,7 +3,7 @@ import type { Project } from "../types"
 import { useNavigate } from "react-router-dom"
 import { useState } from "react";
 // DELETED: import { img } from "framer-motion/client"; (Used standard <img> tag instead)
-import { Loader2Icon } from "lucide-react";
+import { EllipsisIcon, Loader2Icon } from "lucide-react";
 import { div } from "framer-motion/client";
 
 function ProjectCard({ gen, setGen, forComunity = false }: { gen: Project, setGen: React.Dispatch<React.SetStateAction<Project[]>>, forComunity?: boolean }) {
@@ -60,6 +60,14 @@ function ProjectCard({ gen, setGen, forComunity = false }: { gen: Project, setGe
                             <span className="text-[10px] px-2 py-1 bg-green-600/50 backdrop-blur-sm rounded-full text-white">Published</span>
                         )}
                     </div>
+
+
+                    {/* Action Menue for my generations Only */}
+                    {!forComunity && (
+                        <div className="absolute right-3 top-3 sm:opacity-0 group-hover:opacity-100 transition flex items-center gap-2">
+                            <div className="absolute top-3 right-3"><EllipsisIcon className="ml-auto bg-black/10 rounded-full p-1 size-7" /></div>
+                        </div>
+                    )}
 
                     {/* 4. Small Circles (Bottom Right) */}
                     {/* FIX: Moved this container completely OUTSIDE the "Status Badge" container. 
