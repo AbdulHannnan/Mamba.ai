@@ -5,6 +5,7 @@ import { useState } from "react";
 // DELETED: import { img } from "framer-motion/client"; (Used standard <img> tag instead)
 import { EllipsisIcon, ImageIcon, Loader2Icon, PlaySquareIcon, Share2Icon, Trash2Icon } from "lucide-react";
 import { a, button, div } from "framer-motion/client";
+import { GhostButton, PrimaryButton } from "./Buttons";
 
 function ProjectCard({ gen, setGen, forComunity = false }: { gen: Project, setGen: React.Dispatch<React.SetStateAction<Project[]>>, forComunity?: boolean }) {
 
@@ -155,6 +156,17 @@ function ProjectCard({ gen, setGen, forComunity = false }: { gen: Project, setGe
                             </div>
                         )}
 
+                        {/* Buttons */}
+                        {!forComunity && (
+                            <div className="mt-4 grid grid-cols-2 gap-3">
+                                <GhostButton className="text-xs justify-center" onClick={()=>{navigate(`/result/${gen.id}`) ; scrollTo(0,0)}} >View Details</GhostButton>
+
+                                <PrimaryButton onClick={()=> togglePublish(gen.id)}
+                                    className="text-xs justify-center rounded-md"> 
+                                    {gen.isPublished ? "Unpublish" : "Publish"}
+                                </PrimaryButton>
+                            </div>
+                        )}
                 </div>
             </div> 
         </div>
