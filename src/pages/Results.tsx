@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import type { Project } from "../types";
 import { dummyGenerations } from "../assets/assets";
-import { Loader2Icon, RefreshCwIcon } from "lucide-react";
+import { ImageIcon, Loader2Icon, RefreshCwIcon, VideoIcon } from "lucide-react";
 import { img } from "framer-motion/client";
+import { GhostButton } from "../components/Buttons";
 
 const Results = () => {
 
@@ -63,9 +64,37 @@ const Results = () => {
   </div>
 
   {/* Sidebar Action */}
-  <div className="lg:col-span-1">
-     {/* Content goes here */}
-  </div>
+  <div className="space-y-5">
+     {/* download buttons */}
+
+        <div className="glass-pannel p-6 rounded-2xl">
+          <h3 className="text-xl font-semibold mb-4">Action</h3>
+        <div className="flex flex-col gap-3"> 
+          <a href={projectData.generatedImage} download>
+            <GhostButton  disabled={!projectData.generatedImage} className="w-full justify-center rounded-md py-3 disabled:opacity-50 disabled:cursor-not-allowedz">
+              <ImageIcon className="size-4.5" />
+              <p>Download</p>
+            </GhostButton>
+          </a>
+
+           <a href={projectData.generatedVideo} download>
+            <GhostButton  disabled={!projectData.generatedVideo} className="w-full justify-center rounded-md py-3 disabled:opacity-50 disabled:cursor-not-allowedz">
+              <VideoIcon className="size-4.5" />
+              <p>Download Video</p>
+            </GhostButton>
+          </a>
+
+        </div>
+
+
+
+        </div>
+</div>
+
+
+
+
+
 </div>
 
       </div>
