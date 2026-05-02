@@ -12,24 +12,25 @@ import Plans from './pages/Plans';
 import Loading from './pages/Loading';
 
 function App() {
-	return (
-		<>
-			<SoftBackdrop />
-			<LenisScroll />
-			<Navbar />
-			<Routes>	
-			<Route path="/" element={<Home />} />
-			<Route path="/generate" element={<Generator />} />
-			<Route path="/community" element={<Community />} />
-			<Route path="/results:projectId" element={<Results />} />
-			<Route path="/mygenerations" element={<MyGeneration />} />
-			<Route path="/plans" element={<Plans />} />
-			<Route path="/loading" element={<Loading />} />
-			
-			
-			</Routes>
-			<Footer />
-		</>
-	);
+  return (
+    <>
+      <SoftBackdrop />
+      <LenisScroll />
+      <Navbar />
+
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/generate" element={<Generator />} />
+        <Route path="/community" element={<Community />} />
+        <Route path="/result/:projectId" element={<Results />} />
+        <Route path="/mygenerations" element={<MyGeneration />} />
+        <Route path="/plans" element={<Plans />} />
+        <Route path="/loading" element={<Loading />} />
+      </Routes>
+
+      <Footer />
+    </>
+  );
 }
+
 export default App;
