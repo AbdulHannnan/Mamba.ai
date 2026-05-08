@@ -1,11 +1,18 @@
-import { Link, MenuIcon, XIcon } from 'lucide-react';
-import { PrimaryButton } from './Buttons';
+import { DollarSignIcon, FolderEditIcon, GalleryHorizontalEndIcon, Link, MenuIcon, SparkleIcon, XIcon } from 'lucide-react';
+import { GhostButton, PrimaryButton } from './Buttons';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Links, NavLink } from 'react-router-dom';
+import { Links, NavLink, useNavigate } from 'react-router-dom';
 import { assets } from '../assets/assets';
+import { useClerk, useUser, UserButton } from '@clerk/react';
+import { div }  from 'framer-motion/m';
+import { button } from 'framer-motion/m';
 
 export default function Navbar() {
+
+    const navigate = useNavigate();
+    const {user} = useUser();
+    const {openSignIn, openSignUp} = useClerk();
     const [isOpen, setIsOpen] = useState(false);
 
     const navLinks = [
@@ -53,17 +60,41 @@ export default function Navbar() {
                     </a>
                 ))}
 
-                <button onClick={() => setIsOpen(false)} className='font-medium text-gray-300 hover:text-white transition'>
+                {!user ? ( <div>  <button onClick={() => openSignIn()} className='font-medium text-gray-300 hover:text-white transition'>
                     Sign in
                 </button>
-                <PrimaryButton onClick={() => setIsOpen(false)}>Get Started</PrimaryButton>
+                <PrimaryButton onClick={() => {
+                    
+                    openSignUp();
+                }}>
+                    Get Started
+                </PrimaryButton> </div>) : ( <div className='flex gap-2'><GhostButton className='text-sm font-medium text-gray-300 hover:text-white transition' onClick={() => {navigate("/plans")}}>
+                    Credits :
+                    </GhostButton>
+                    <UserButton>
+                        <UserButton.MenuItems>
+                            <UserButton.Action label='generate' labelIcon={<SparkleIcon className='size={14}' onClick={()=>navigate("/generate")}/>} />
 
-                <button
+                            <UserButton.Action label='My Generations' labelIcon={<FolderEditIcon className='size={14}' onClick={()=>navigate("/mygenerations")}/>} />    
+
+                                
+                            <UserButton.Action label='Community' labelIcon={<GalleryHorizontalEndIcon className='size={14}' onClick={()=>navigate("/community")}/>} /> 
+
+                                
+                            <UserButton.Action label='Plans' labelIcon={<DollarSignIcon className='size={14}' onClick={()=>navigate("/plans")}/>} /> 
+                        </UserButton.MenuItems>
+                    </UserButton>
+                    
+                    
+                    </div> )}
+             
+                {!user   <button
                     onClick={() => setIsOpen(false)}
                     className="rounded-md bg-white p-2 text-gray-800 ring-white active:ring-2"
                 >
                     <XIcon />
-                </button>
+                </button>}
+              
             </div>
         </motion.nav>
     );
