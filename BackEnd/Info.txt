@@ -1,0 +1,10 @@
+I have connected the Neon DB with the help of clerk webhook and for now I have use the URL of localhost given by PORT Farwarding with endpoints of /api/clerk
+but
+when I restart the laptop and localhost restart then the URL will be changed so at that moment I have to update the URL manually on NEON Webhook endpoints
+
+and
+
+After Deployement, use the permanent Backend URL for this Purpose.
+
+
+**************************************************************************************************************************************************************************
