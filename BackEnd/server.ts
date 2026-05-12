@@ -3,6 +3,7 @@ import express, { Request, Response } from 'express';
 import cors from "cors";
 import { clerkMiddleware } from '@clerk/express'
 import clerkwebhook from "./controllers/clerk.js";
+import './configs/instrument.mjs';
 
 const app = express();
 
