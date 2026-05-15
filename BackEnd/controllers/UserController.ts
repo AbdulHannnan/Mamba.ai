@@ -23,3 +23,26 @@ export const getUserProjects = async (req: Request, res: Response) => {
         res.status(500).json({message: error.code || error.message});
     }
 }
+
+
+// get projects by ID
+
+export const getUserProjectById = async (req: Request, res: Response) => {
+     try {
+        
+    }catch (error: any) {
+        Sentry.captureException(error);
+        res.status(500).json({message: error.code || error.message});
+    }
+}
+
+
+// publish and unpublish project
+export const toggleProjectStatus = async (req: Request, res: Response) => {
+     try {
+        
+    }catch (error: any) {
+        Sentry.captureException(error);
+        res.status(500).json({message: error.code || error.message});
+    }
+}
