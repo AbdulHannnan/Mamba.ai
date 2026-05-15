@@ -15,3 +15,11 @@ export const getUserProfile = async (req: Request, res: Response) => {
 
 // Get all User Projects
 
+export const getUserProjects = async (req: Request, res: Response) => {
+     try {
+        
+    }catch (error: any) {
+        Sentry.captureException(error);
+        res.status(500).json({message: error.code || error.message});
+    }
+}
