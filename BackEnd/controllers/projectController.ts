@@ -3,6 +3,14 @@ import * as Sentry from "@sentry/node";
 import { prisma } from "../configs/prisma.js";
 
 export const createProject = async (req: Request, res: Response) => {
+
+    let projectTemplate: string;
+    const { userId } = req.auth();
+    let isCreditDeducted = false;
+
+    const {name="Untitled Project", productName, productDescription, userPrompt , aspectRatio , targetLeangth = 5 } = req.body;
+
+    const images: any  = req.Files;
     try {
 
     }catch (error: any) {
