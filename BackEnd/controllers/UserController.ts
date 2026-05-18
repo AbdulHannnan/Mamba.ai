@@ -92,6 +92,9 @@ export const toggleProjectStatus = async (req: Request, res: Response) => {
     if (!project) {
       return res.status(404).json({ message: "Project not found" });
     }
+    if(!project.generatedImage && !project.generatedVideo){
+      return res.status(400).json({ message: "Project has no generated content to publish" });
+    }
 
     const updatedProject = await prisma.project.update({
       where: {
@@ -101,8 +104,7 @@ export const toggleProjectStatus = async (req: Request, res: Response) => {
         isPublished: !project.isPublished,
       },
     });
-
-    res.status(200).json({ project: updatedProject });
+res.status(200).json({ project: updatedProject });
   } catch (error: any) {
     Sentry.captureException(error);
     res.status(500).json({ message: error.code || error.message });
