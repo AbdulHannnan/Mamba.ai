@@ -1,7 +1,7 @@
 import  { useEffect, useState } from 'react'
 import type { Project } from '../types';
 import { dummyGenerations } from '../assets/assets';
-import { div } from 'framer-motion/client';
+// import { div } from 'framer-motion/client';
 import { Loader2Icon } from 'lucide-react';
 import ProjectCard from '../components/ProjectCard';
 
