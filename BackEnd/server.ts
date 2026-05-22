@@ -7,7 +7,7 @@ import clerkwebhook from "./controllers/clerk.js";
 
 import * as Sentry from "@sentry/node"
 import userRoutes from './routes/userRoutes.js';
-import projectRouter from './routes/projectController.js';
+import projectRouter from './routes/projectRoutes.js';
 
 const app = express();
 
