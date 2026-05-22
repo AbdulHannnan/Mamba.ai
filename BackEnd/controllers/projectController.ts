@@ -23,7 +23,7 @@ export const createProject = async (req: Request, res: Response) => {
         await prisma.user.update({
             where: { id: userId },
             data: { credits: user.credits - 5 }
-        }}.then(() => {
+        }).then(() => {
             isCreditDeducted = true
         });
  }
