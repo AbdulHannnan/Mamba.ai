@@ -311,6 +311,11 @@ export const createVideo = async (req: Request, res: Response) => {
 
 export const getAllPublishedProjects = async (req: Request, res: Response) => {
     try {
+        const projects = await prisma.project.findMany({
+            where : { isPublished : true },
+            
+        });
+        res.status(200).json({ projects });
 
     }catch (error: any) {
         Sentry.captureException(error);
@@ -320,6 +325,21 @@ export const getAllPublishedProjects = async (req: Request, res: Response) => {
 
 export const deletProject = async (req: Request, res: Response) => {
     try {
+
+        const {userId} = req.auth();
+        const { projectId } = req.params;
+
+        const project = await prisma.project.findUnique({
+            where : {id: projectId ,userId}
+        })
+        if(!project){
+            res.status(404).json({message : "Project not Found"})
+        }
+
+        await.prisma.project.delet({
+            where : {id: {projectId}}
+        })
+        res.json({message : "Project Deleted"})
 
     }catch (error: any) {
         Sentry.captureException(error);
