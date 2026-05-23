@@ -177,8 +177,48 @@ export const createProject = async (req: Request, res: Response) => {
 }
 
 
+
+
+
 export const createVideo = async (req: Request, res: Response) => {
-    try {
+
+    const { userId } = req.auth();
+        const { projectId } = req.body;
+
+        const user = await prisma.user.findUnique({ where: { id: userId } });
+        if (!user || user.credits < 10) {
+            return res.status(401).json({ message: "User not found or insufficient credits." });
+        }else{
+            // deduct creadit for user generateion
+                await prisma.user.update({
+                    where: { id: userId },
+                    data: { credits: user.credits - 10 }
+                }).then(() => {
+                    isCreditDeducted = true
+                });
+         try {
+            const project = await prisma.project.findUnique({ where: { id: projectId , include: { user: true } } });
+            if(!project || project.isGenerating){
+                return res.status(400).json({ message: "Project not found or already generating." });
+            }
+            if(project.generatedVideo){
+                return res.status(404).json({message : "Video already generated for this project."});
+            }
+
+            await prisma.project.update(
+                {where : { id : projectId }, 
+                data : { isGenerating : true }
+            });
+
+            const prompt = `Generate a video ad for a product named ${project.productName} with the following description: ${project.productDescription}. The video should be approximately ${project.targetLeangth} seconds long and should be in ${project.aspectRatio} aspect ratio. Use the following user prompt for inspiration: ${project.userPrompt}. Use the following images as references: ${project.images[0]} and ${project.images[1]}. The video should be engaging and visually appealing, showcasing the product in the best possible way. Please ensure that the video is suitable for social media platforms and adheres to community guidelines.Match lighting, shadows and perpective of the images.`
+
+            // call the AI model to generate the video
+
+            const model = "veo-3.1-generate-preview"
+
+            if(!project.generatedImage){
+                throw new Error("No reference image found for this project.");
+            }
 
     }catch (error: any) {
         Sentry.captureException(error);
