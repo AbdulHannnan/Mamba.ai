@@ -10,7 +10,7 @@ import {
 import { GhostButton, PrimaryButton } from './Buttons';
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { data, NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { assets } from '../assets/assets';
 import { useClerk, useUser, UserButton, useAuth } from '@clerk/react';
 import api from '../configs/axios';
@@ -19,37 +19,42 @@ import toast from 'react-hot-toast';
 export default function Navbar() {
   const navigate = useNavigate();
   const { user } = useUser();
+  const { pathname } = useLocation();
+  const { getToken } = useAuth();
 
   const [credits, setCredits] = useState(0);
-  const {pathname} = useLocation()
-  const {getTokens} = useAuth()
-
   const { openSignIn, openSignUp } = useClerk();
   const [isOpen, setIsOpen] = useState(false);
 
   const navLinks = [
-    { name: 'Home', href: '/#' },
+    { name: 'Home', href: '/' },
     { name: 'Create', href: '/generate' },
     { name: 'Community', href: '/community' },
     { name: 'Plans', href: '/plans' },
   ];
 
-  const getUserCredits = async ()=>{
-    try{
-      const Tokens = await getTokens({
-        const {data} = await api.get('api/user/credits' , {headers : {Authorization : `Bearer ${getTokens}`}})
-        setCredits(data.credits)
-         }catch(error:any){
-          toast.error(error?.response?.data?.message || error.message)
-          console.log(error);
-    }
-  }
+  const getUserCredits = async () => {
+    try {
+      const token = await getToken();
 
-  useEffect(()=>{
-    if(user){
-      (async ()=>await getUserCredits() )()
+      const { data } = await api.get('/api/user/credits', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setCredits(data.credits);
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message || error.message);
+      console.log(error);
     }
-  } , [user, pathname])
+  };
+
+  useEffect(() => {
+    if (user) {
+      getUserCredits();
+    }
+  }, [user, pathname]);
 
   return (
     <motion.nav
@@ -80,7 +85,6 @@ export default function Navbar() {
         <div className="hidden md:flex items-center gap-3">
           {!user ? (
             <>
-              {/* Clerk Sign In popup */}
               <button
                 onClick={() => openSignIn()}
                 className="text-sm font-medium text-gray-300 hover:text-white transition max-sm:hidden"
@@ -88,7 +92,6 @@ export default function Navbar() {
                 Sign in
               </button>
 
-              {/* Clerk Sign Up popup */}
               <PrimaryButton
                 onClick={() => openSignUp()}
                 className="max-sm:text-xs hidden sm:inline-block"
@@ -107,7 +110,6 @@ export default function Navbar() {
 
               <UserButton>
                 <UserButton.MenuItems>
-                  {/* onClick must be on UserButton.Action, not on the icon */}
                   <UserButton.Action
                     label="Generate"
                     labelIcon={<SparkleIcon size={14} />}
@@ -148,14 +150,17 @@ export default function Navbar() {
         }`}
       >
         {navLinks.map((link) => (
-          <a key={link.name} href={link.href} onClick={() => setIsOpen(false)}>
+          <NavLink
+            key={link.name}
+            to={link.href}
+            onClick={() => setIsOpen(false)}
+          >
             {link.name}
-          </a>
+          </NavLink>
         ))}
 
         {!user ? (
           <div className="flex flex-col items-center gap-4">
-            {/* Clerk Sign In popup */}
             <button
               onClick={() => {
                 setIsOpen(false);
@@ -166,7 +171,6 @@ export default function Navbar() {
               Sign in
             </button>
 
-            {/* Clerk Sign Up popup */}
             <PrimaryButton
               onClick={() => {
                 setIsOpen(false);
@@ -185,40 +189,13 @@ export default function Navbar() {
                 navigate('/plans');
               }}
             >
-              Credits :
+              Credits : {credits}
             </GhostButton>
 
-            <UserButton>
-              <UserButton.MenuItems>
-                <UserButton.Action
-                  label="Generate"
-                  labelIcon={<SparkleIcon size={14} />}
-                  onClick={() => navigate('/generate')}
-                />
-
-                <UserButton.Action
-                  label="My Generations"
-                  labelIcon={<FolderEditIcon size={14} />}
-                  onClick={() => navigate('/mygenerations')}
-                />
-
-                <UserButton.Action
-                  label="Community"
-                  labelIcon={<GalleryHorizontalEndIcon size={14} />}
-                  onClick={() => navigate('/community')}
-                />
-
-                <UserButton.Action
-                  label="Plans"
-                  labelIcon={<DollarSignIcon size={14} />}
-                  onClick={() => navigate('/plans')}
-                />
-              </UserButton.MenuItems>
-            </UserButton>
+            <UserButton />
           </div>
         )}
 
-        {/* This was broken before: {!user <button>... } */}
         <button
           onClick={() => setIsOpen(false)}
           className="rounded-md bg-white p-2 text-gray-800 ring-white active:ring-2"
