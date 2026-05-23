@@ -3,9 +3,10 @@ import * as Sentry from "@sentry/node";
 import { prisma } from "../configs/prisma.js"; 
 import { v2 as cloudinary } from "cloudinary";
 import { GenerateContentConfig, HarmBlockThreshold, HarmCategory } from "@google/genai/web";
-import fs from "fs";
+import fs, { mkdirSync } from "fs";
 import path from "path";
 import ai from "../configs/ai.js";
+import axios from "axios";
 
 const loadImage = (path:string , mimeType:string)=>{
     reurn {
@@ -220,7 +221,89 @@ export const createVideo = async (req: Request, res: Response) => {
                 throw new Error("No reference image found for this project.");
             }
 
+            const image = await axios.get(project.generatedImage, { responseType: 'arraybuffer' });
+
+            const imageBase64 = Buffer.from(image.data);
+            let operation : any = await ai.models.generateVideos({
+                model,
+                prompt,
+                image : {
+                    imageBytes : imageBytes.toString('base64'),
+                    mimeType : 'image/jpeg'
+                },
+                config : {
+                    aspectRatio : project?.aspectRatio || '9:16',
+                    numberOfVideos : 1,
+                    resolution : '720p',
+                }
+            })
+
+            while(!operation.done){
+                console.log("Video generation in progress...");
+                await new Promise(resolve => setTimeout(resolve, 10000));
+                operation = await ai.operations.getVideosOperation({
+                    operation : operation
+                });
+             }
+        
+             const filename = `video_${projectId}_${Date.now()}.mp4`;
+             const filepath = path.join(__dirname, "../generatedVideos", filename);
+             const videoBuffer = Buffer.from(operation.response.videoBytes, 'base64');
+             fs.writeFileSync(path.join(__dirname, "../generatedVideos", filename), videoBuffer);
+
+             fs mkdirSync(path.join(__dirname, "../generatedVideos"), { recursive: true });
+
+             const uploadResult = await cloudinary.uploader.upload(filepath, {
+                resource_type: "video",
+             });
+
+             if(!operation.response.generatedVideos){
+                throw new Error("Failed to generate video.");
+             }
+
+            //   download the video
+             await ai.files.download({
+              file: operation.response.generatedVideos[0].video,
+              downloadPath : filepath
+             })
+
+            //  upload result to cloudinary
+             const uploadResult = await cloudinary.uploader.upload(filepath, {
+                resource_type: "video",
+             });
+
+            //  store the video url in database
+            await prisma.project.update({
+                where : { id : projectId },
+                data : { generatedVideo : uploadResult.secure_url, isGenerating : false }
+            })
+
+            // remove video from the disk after uploading to cloudinary
+            fs.unlinkSync(filepath);
+
+            res.status(200).json({
+                message : "Video generated successfully.",
+                projectId : project.id,
+                generatedVideo : uploadResult.secure_url
+            }) 
+
+
     }catch (error: any) {
+
+            await prisma.project.update({
+                where: { id: ProjectId, userId },
+                data: { isGenerating: false , error: error.message}
+            });
+
+        if (isCreditDeducted) {
+            // add credit back to user if there is any error
+            await prisma.user.update({
+                where: { id: userId },
+                data: { credits: { increment: 10 } }
+            }); 
+        }
+
+
         Sentry.captureException(error);
         res.status(500).json({ message: error.code || error.message });
     }
