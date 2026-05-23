@@ -8,15 +8,22 @@ import {
 } from 'lucide-react';
 
 import { GhostButton, PrimaryButton } from './Buttons';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { data, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { assets } from '../assets/assets';
-import { useClerk, useUser, UserButton } from '@clerk/react';
+import { useClerk, useUser, UserButton, useAuth } from '@clerk/react';
+import api from '../configs/axios';
+import toast from 'react-hot-toast';
 
 export default function Navbar() {
   const navigate = useNavigate();
   const { user } = useUser();
+
+  const [credits, setCredits] = useState(0);
+  const {pathname} = useLocation()
+  const {getTokens} = useAuth()
+
   const { openSignIn, openSignUp } = useClerk();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -26,6 +33,23 @@ export default function Navbar() {
     { name: 'Community', href: '/community' },
     { name: 'Plans', href: '/plans' },
   ];
+
+  const getUserCredits = async ()=>{
+    try{
+      const Tokens = await getTokens({
+        const {data} = await api.get('api/user/credits' , {headers : {Authorization : `Bearer ${getTokens}`}})
+        setCredits(data.credits)
+         }catch(error:any){
+          toast.error(error?.response?.data?.message || error.message)
+          console.log(error);
+    }
+  }
+
+  useEffect(()=>{
+    if(user){
+      (async ()=>await getUserCredits() )()
+    }
+  } , [user, pathname])
 
   return (
     <motion.nav
@@ -78,7 +102,7 @@ export default function Navbar() {
                 className="text-sm font-medium text-gray-300 hover:text-white transition"
                 onClick={() => navigate('/plans')}
               >
-                Credits :
+                Credits : {credits}
               </GhostButton>
 
               <UserButton>
