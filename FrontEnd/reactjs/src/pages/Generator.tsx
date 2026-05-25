@@ -7,11 +7,12 @@ import { PrimaryButton } from "../components/Buttons";
 import { getToken, useAuth, useUser } from "@clerk/react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import api from "../configs/axios";
 
 const Generator = () => {
 
   const {user} = useUser();
-  const {get Token} = useAuth();
+  const {getToken} = useAuth();
   const navigate = useNavigate();
 
   // Fixed typos from 'ocnst' to 'const'
@@ -56,7 +57,7 @@ const Generator = () => {
 
           const token = await getToken();
           const {data} = await api.post('api/project/create' , formData, {
-            header : {Authorization : `Baerer ${token}`}
+            headers : {Authorization : `Baerer ${token}`}
           })
 
           toast.success(data.message)
