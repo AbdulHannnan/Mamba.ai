@@ -4,8 +4,16 @@ import UploadZone from "../components/UploadZone";
 import {  Loader2Icon, RectangleVerticalIcon, Wand2Icon } from "lucide-react";
 import { RectangleHorizontalIcon } from "lucide-react";
 import { PrimaryButton } from "../components/Buttons";
+import { getToken, useAuth, useUser } from "@clerk/react";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const Generator = () => {
+
+  const {user} = useUser();
+  const {get Token} = useAuth();
+  const navigate = useNavigate();
+
   // Fixed typos from 'ocnst' to 'const'
   const [name, setname] = useState('');
   const [productName, setproductName] = useState('');
@@ -31,6 +39,32 @@ const Generator = () => {
 
   const handleGenerate = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if(!user) return toast("Please login to Generate")
+      if(!ProductImage || !ModelImage || !name || !productName || !AspectRatio) return toast("Please Complete all the Fields")
+
+        try {
+          setisGenerating(true);
+          const formData = new FormData();
+          formData.append('name', name)
+          formData.append('productName', productName)
+          formData.append('productDescription', productDescription)
+          formData.append('userPrompt', userPrompt)
+          formData.append('aspectRatio', AspectRatio)
+          formData.append('aspectRatio', AspectRatio)
+          formData.append('productImage', ProductImage)
+          formData.append('modelImage', ModelImage)
+
+          const token = await getToken();
+          const {data} = await api.post('api/project/create' , formData, {
+            header : {Authorization : `Baerer ${token}`}
+          })
+
+          toast.success(data.message)
+          navigate('/result/' + data.projectId)
+        } catch (error : any) {
+          setisGenerating(false);
+          toast.error(error?.response?.data?.message || error.message)
+        }
   };
 
   return (
