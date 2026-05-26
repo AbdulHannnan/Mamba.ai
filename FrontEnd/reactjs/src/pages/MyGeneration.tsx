@@ -1,22 +1,45 @@
 import type {Project} from "../types"
 import { useState, useEffect } from 'react';
-import {dummyGenerations} from "../assets/assets"
 import { Loader2Icon } from 'lucide-react';
 import ProjectCard from '../components/ProjectCard';
 import { PrimaryButton } from "../components/Buttons";
+import { useAuth, useUser } from "@clerk/react";
+import { useNavigate } from "react-router-dom";
+import api from "../configs/axios";
+import toast from "react-hot-toast";
 
 const MyGeneration = () => {
+
+  const {user, isLoaded} = useUser()
+  const {getToken} = useAuth()
+  const navigate = useNavigate()
+
+
 
   const [Generation , setGeneration] = useState<Project[]>([]);
   const [loading, setloading] = useState(true);
 
   const fetchMyGeneration = async () => {
-  setTimeout(() => { setGeneration(dummyGenerations); setloading(false) }, 1000)
+  try {
+        const token = await getToken();
+        const {data} = await api.get('/api/user/projects' , {
+          headers : {Authorization: `Bearer ${token}`}
+        })
+        setGeneration(data.projects)
+        setloading(false)
+  } catch (error : any) {
+    toast.error(error?.response?.data?.message || error.message);
+    console.log(error)
+  }
   }
 
   useEffect(() => {
-   fetchMyGeneration();
-  }, [])
+    if(user){
+ fetchMyGeneration();
+    }else if(isLoaded && !user){
+      navigate('/')
+    }
+ }, [user])
 
   return loading ?(
      <div className='flex items-center justify-center min-h-screen'>
