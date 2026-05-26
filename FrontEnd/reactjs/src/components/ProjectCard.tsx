@@ -11,6 +11,10 @@ import {
   Trash2Icon,
 } from "lucide-react";
 import { GhostButton, PrimaryButton } from "./Buttons";
+import { useAuth } from "@clerk/react";
+import api from "../configs/axios";
+import MyGeneration from "../pages/MyGeneration";
+import toast from "react-hot-toast";
 
 function ProjectCard({
   gen,
@@ -21,6 +25,10 @@ function ProjectCard({
   setGeneration: React.Dispatch<React.SetStateAction<Project[]>>;
   forComunity?: boolean;
 }) {
+
+  const {getTokekn} = useAuth()
+
+
   const navigate = useNavigate();
   const [menueOpen, setMenueOpen] = useState(false);
 
@@ -31,17 +39,36 @@ function ProjectCard({
 
     if (!confirmDelete) return;
 
+    try {
+          const token = await getTokekn()
+          const {data} = await api.delete(`api/project/${id}`, {
+            headers : {Authorization: `baerer ${token}`}
+          })
+          setGeneration((MyGeneration)=>{
+            MyGeneration.filter((gen)=>{gen.id !== id});
+            toast.success(data.message);
+          })
+    } catch ( error : any) {
+      toast.error(error?.response?.data?.message || error.message)
+    }
+
     setGeneration((prev) => prev.filter((project) => project.id !== id));
   };
 
   const togglePublish = async (projectId: string) => {
-    setGeneration((prev) =>
-      prev.map((project) =>
-        project.id === projectId
-          ? { ...project, isPublished: !project.isPublished }
-          : project
-      )
-    );
+    
+    try {
+          const token = await getTokekn()
+          const {data} = await api.get(`api/user/publish/${projectId}`, {
+            headers : {Authorization: `baerer ${token}`}
+          })
+          setGeneration((MyGeneration)=>{
+            MyGeneration.map((gen)=> gen.id == projectId ? {...gen , isPublished : data.isPublished} : gen);
+            toast.success(data.isPublished ? "project Published" : "project UnPublished");
+          })
+    } catch ( error : any) {
+      toast.error(error?.response?.data?.message || error.message)
+    }
   };
 
   return (
