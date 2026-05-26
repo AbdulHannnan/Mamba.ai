@@ -13,26 +13,24 @@ import {
 import { GhostButton, PrimaryButton } from "./Buttons";
 import { useAuth } from "@clerk/react";
 import api from "../configs/axios";
-import MyGeneration from "../pages/MyGeneration";
 import toast from "react-hot-toast";
+
+type ProjectCardProps = {
+  gen: Project;
+  setGeneration: React.Dispatch<React.SetStateAction<Project[]>>;
+  forCommunity?: boolean;
+};
 
 function ProjectCard({
   gen,
   setGeneration,
-  forComunity = false,
-}: {
-  gen: Project;
-  setGeneration: React.Dispatch<React.SetStateAction<Project[]>>;
-  forComunity?: boolean;
-}) {
-
-  const {getTokekn} = useAuth()
-
-
+  forCommunity = false,
+}: ProjectCardProps) {
+  const { getToken } = useAuth();
   const navigate = useNavigate();
   const [menueOpen, setMenueOpen] = useState(false);
 
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: string) => {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this project? This action cannot be undone."
     );
@@ -40,34 +38,47 @@ function ProjectCard({
     if (!confirmDelete) return;
 
     try {
-          const token = await getTokekn()
-          const {data} = await api.delete(`api/project/${id}`, {
-            headers : {Authorization: `baerer ${token}`}
-          })
-          setGeneration((MyGeneration)=>{
-            MyGeneration.filter((gen)=>{gen.id !== id});
-            toast.success(data.message);
-          })
-    } catch ( error : any) {
-      toast.error(error?.response?.data?.message || error.message)
-    }
+      const token = await getToken();
 
-    setGeneration((prev) => prev.filter((project) => project.id !== id));
+      const { data } = await api.delete(`api/project/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setGeneration((prev) => prev.filter((project) => project.id !== id));
+
+      toast.success(data.message || "Project deleted successfully");
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message || error.message);
+      console.log(error);
+    }
   };
 
   const togglePublish = async (projectId: string) => {
-    
     try {
-          const token = await getTokekn()
-          const {data} = await api.get(`api/user/publish/${projectId}`, {
-            headers : {Authorization: `baerer ${token}`}
-          })
-          setGeneration((MyGeneration)=>{
-            MyGeneration.map((gen)=> gen.id == projectId ? {...gen , isPublished : data.isPublished} : gen);
-            toast.success(data.isPublished ? "project Published" : "project UnPublished");
-          })
-    } catch ( error : any) {
-      toast.error(error?.response?.data?.message || error.message)
+      const token = await getToken();
+
+      const { data } = await api.get(`api/user/publish/${projectId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setGeneration((prev) =>
+        prev.map((project) =>
+          project.id === projectId
+            ? { ...project, isPublished: data.isPublished }
+            : project
+        )
+      );
+
+      toast.success(
+        data.isPublished ? "Project published" : "Project unpublished"
+      );
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message || error.message);
+      console.log(error);
     }
   };
 
@@ -123,7 +134,7 @@ function ProjectCard({
             )}
           </div>
 
-          {!forComunity && (
+          {!forCommunity && (
             <div
               onMouseDownCapture={() => setMenueOpen(true)}
               onMouseLeave={() => setMenueOpen(false)}
@@ -161,13 +172,15 @@ function ProjectCard({
 
                   {(gen.generatedImage || gen.generatedVideo) && (
                     <button
-                      onClick={() =>
-                        navigator.share({
-                          url: gen.generatedVideo || gen.generatedImage,
-                          title: gen.productName,
-                          text: gen.productDescription,
-                        })
-                      }
+                      onClick={() => {
+                        if (navigator.share) {
+                          navigator.share({
+                            url: gen.generatedVideo || gen.generatedImage,
+                            title: gen.productName,
+                            text: gen.productDescription,
+                          });
+                        }
+                      }}
                       className="w-full flex gap-2 items-center px-4 py-2 hover:bg-black/10 cursor-pointer"
                     >
                       <Share2Icon size={14} /> Share
@@ -237,7 +250,7 @@ function ProjectCard({
             </div>
           )}
 
-          {!forComunity && (
+          {!forCommunity && (
             <div className="mt-4 grid grid-cols-2 gap-3">
               <GhostButton
                 className="text-xs justify-center"

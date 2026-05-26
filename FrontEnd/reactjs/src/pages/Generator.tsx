@@ -4,7 +4,7 @@ import UploadZone from "../components/UploadZone";
 import {  Loader2Icon, RectangleVerticalIcon, Wand2Icon } from "lucide-react";
 import { RectangleHorizontalIcon } from "lucide-react";
 import { PrimaryButton } from "../components/Buttons";
-import { getToken, useAuth, useUser } from "@clerk/react";
+import { useAuth, useUser } from "@clerk/react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import api from "../configs/axios";
