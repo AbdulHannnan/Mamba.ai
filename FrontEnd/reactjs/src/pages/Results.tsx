@@ -18,51 +18,73 @@ const Results = () => {
   const [isGenerating, setIsGenerating] = useState(false);
 
   const fetchProjectData = async () => {
-    setLoading(true);
+  if (!projectId) return;
 
-    try {
-      const token = await getToken()
-      const {data} = await api.get(`api/user/projects/${projectId}`, {
-        headers : {Authorization: `Baerer ${token}`}
-      })
-      setProjectData(data.project)
-      setIsGenerating(data.project.isGenerating)
-      setLoading(false)
-    } catch (error : any) {
+  setLoading(true);
 
-      toast.error(error?.response?.data?.message || error.message)
-      console.log(error)
-    }
+  try {
+    const token = await getToken();
 
-  };
+    const { data } = await api.get(`api/user/projects/${projectId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
-  const handleGenerateVideo = async () => {
-     setIsGenerating(true);
-     try {
-      const token = await getToken()
-      const {data} = await api.post('api/project/video' , {projectId} ,  {
-        headers : {Authorization: `Baerer ${token}`} )
+    setProjectData(data.project);
+    setIsGenerating(data.project.isGenerating);
+  } catch (error: any) {
+    toast.error(error?.response?.data?.message || error.message);
+    console.log(error);
+  } finally {
+    setLoading(false);
+  }
+};
 
-        setProjectData(prev => ({...prev , generatedVideo:data.VideoUrl, isGenerating:false}))
+const handleGenerateVideo = async () => {
+  setIsGenerating(true);
 
-        toast.success(data,message);
-        setIsGenerating(false);
+  try {
+    const token = await getToken();
 
-     } catch (error:any) {
-      toast.error(error?.response?.data?.message || error.message)
-      console.log(error)
-     }
-  };
+    const { data } = await api.post(
+      "api/project/video",
+      { projectId },
+      {
+        headers: {
+         Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
-  useEffect(() => {
-    if(user && !projectId){
-      fetchProjectData();
-    }
-    else if(isLoaded && !user){
-      navigate('/')
-    }
-  }, [user]);
+    const videoUrl = data.videoUrl || data.VideoUrl;
 
+    setProjectData((prev) =>
+      prev
+        ? {
+            ...prev,
+            generatedVideo: videoUrl,
+            isGenerating: false,
+          }
+        : prev
+    );
+
+    toast.success(data.message || "Video generated successfully");
+    setIsGenerating(false);
+  } catch (error: any) {
+    toast.error(error?.response?.data?.message || error.message);
+    console.log(error);
+    setIsGenerating(false);
+  }
+};
+
+useEffect(() => {
+  if (user && projectId) {
+    fetchProjectData();
+  } else if (isLoaded && !user) {
+    navigate("/");
+  }
+}, [user, isLoaded, projectId, navigate]);
   // Fetch Project in Every 10 secounds 
   useEffect(()=>{
     if(user && isGenerating){
@@ -71,7 +93,7 @@ const Results = () => {
       }, 10000)
       return ()=> clearInterval(interval)
     }
-  })
+  }, [user, isGenerating ])
 
   if (loading) {
     return (
@@ -164,7 +186,7 @@ const Results = () => {
             </div>
 
                 {/* Generate video button */}
-                <div className="glass-pannel p-6 rounded-2xl relative overflow-hidden">
+                <div className="glass-panel p-6 rounded-2xl relative overflow-hidden">
                   <div className="absolute top-0 right-0 p-4 opacity-10">
                     <VideoIcon  className="size-24" />
                   </div>
