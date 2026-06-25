@@ -98,7 +98,7 @@ useEffect(() => {
   if (loading) {
     return (
       <div className="h-screen w-full flex items-center justify-center">
-        <Loader2Icon className="animate-spin size-9 text-indigo-400" />
+        <Loader2Icon className="animate-spin size-9 text-indigo-500" />
       </div>
     );
   }
