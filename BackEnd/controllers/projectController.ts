@@ -9,8 +9,11 @@ import {
 } from "@google/genai/web";
 import fs, { mkdirSync } from "fs";
 import path from "path";
+import { fileURLToPath } from "url";
 import ai from "../configs/ai.js";
 import axios from "axios";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const loadImage = (filePath: string, mimeType: string) => {
   return {
@@ -37,7 +40,7 @@ export const createProject = async (req: Request, res: Response) => {
     productDescription,
     userPrompt,
     aspectRatio,
-    targetLength = req.body.targetLeangth || 5,
+    targetLength = 5,
   } = req.body;
 
   const images: any[] = Array.isArray(req.files) ? req.files : [];
@@ -71,6 +74,8 @@ export const createProject = async (req: Request, res: Response) => {
         const result = await cloudinary.uploader.upload(image.path, {
           resource_type: "image",
         });
+
+        fs.unlinkSync(image.path);
 
         return result.secure_url;
       })
