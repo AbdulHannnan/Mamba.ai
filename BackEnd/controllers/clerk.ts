@@ -53,7 +53,7 @@ const clerkwebhook = async (req: Request, res: Response) => {
       case "paymentAttempt.updated": {
         if (
           (data.chargeType === "recurring" || data.chargeType === "checkout") &&
-          data.status === ""
+          data.status === "paid"
         ) {
           const credit = {
             pro: 80,
@@ -62,7 +62,7 @@ const clerkwebhook = async (req: Request, res: Response) => {
 
           const clerkUserId = data?.payer?.user_id;
 
-          const planId = data?.supsciption_item?.[0]?.plan?.slug as
+          const planId = data?.subscription_items?.[0]?.plan?.slug as
             | keyof typeof credit
             | undefined;
 
