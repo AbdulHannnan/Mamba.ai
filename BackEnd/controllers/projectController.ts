@@ -87,7 +87,6 @@ export const createProject = async (req: Request, res: Response) => {
         targetLength: Number(targetLength) || 5,
         uploadedImages: uploadImages,
         isGenerating: true,
-        isCreditDeducted,
       },
     });
 
