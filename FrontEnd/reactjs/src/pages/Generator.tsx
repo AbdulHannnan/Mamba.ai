@@ -57,7 +57,7 @@ const Generator = () => {
 
           const token = await getToken();
           const {data} = await api.post('api/project/create' , formData, {
-            headers : {Authorization : `Baerer ${token}`}
+            headers : {Authorization : `Bearer ${token}`}
           })
 
           toast.success(data.message)
