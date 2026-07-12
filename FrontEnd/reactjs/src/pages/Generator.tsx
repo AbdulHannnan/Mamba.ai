@@ -52,8 +52,8 @@ const Generator = () => {
           formData.append('userPrompt', userPrompt)
           formData.append('aspectRatio', AspectRatio)
           formData.append('aspectRatio', AspectRatio)
-          formData.append('productImage', ProductImage)
-          formData.append('modelImage', ModelImage)
+          formData.append('images', ProductImage)
+          formData.append('images', ModelImage)
 
           const token = await getToken();
           const {data} = await api.post('api/project/create' , formData, {
