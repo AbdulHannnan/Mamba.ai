@@ -52,7 +52,7 @@ const clerkwebhook = async (req: Request, res: Response) => {
 
       case "paymentAttempt.updated": {
         if (
-          (data.chargeType === "recurring" || data.chargeType === "checkout") &&
+          (data.charge_type === "recurring" || data.charge_type === "checkout") &&
           data.status === "paid"
         ) {
           const credit = {
