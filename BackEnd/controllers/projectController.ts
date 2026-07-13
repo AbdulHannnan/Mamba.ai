@@ -107,7 +107,7 @@ export const createProject = async (req: Request, res: Response) => {
       imageConfig: {
         aspectRatio: aspectRatio || "9:16",
         maxOutputImages: 5,
-        imageSize: "1kb",
+        imageSize: "1K",
       },
       safetySettings: [
         {
