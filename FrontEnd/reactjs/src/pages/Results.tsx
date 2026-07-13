@@ -57,7 +57,7 @@ const handleGenerateVideo = async () => {
       }
     );
 
-    const videoUrl = data.videoUrl || data.VideoUrl;
+    const videoUrl = data.generatedVideo;
 
     setProjectData((prev) =>
       prev
