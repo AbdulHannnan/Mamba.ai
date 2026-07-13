@@ -51,7 +51,6 @@ const Generator = () => {
           formData.append('productDescription', productDescription)
           formData.append('userPrompt', userPrompt)
           formData.append('aspectRatio', AspectRatio)
-          formData.append('aspectRatio', AspectRatio)
           formData.append('images', ProductImage)
           formData.append('images', ModelImage)
 

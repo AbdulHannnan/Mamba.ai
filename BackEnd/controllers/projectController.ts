@@ -75,8 +75,6 @@ export const createProject = async (req: Request, res: Response) => {
           resource_type: "image",
         });
 
-        fs.unlinkSync(image.path);
-
         return result.secure_url;
       })
     );
@@ -133,6 +131,8 @@ export const createProject = async (req: Request, res: Response) => {
     const image2base64 = images[1]
       ? loadImage(images[1].path, images[1].mimetype)
       : null;
+
+    images.forEach((image: any) => fs.unlinkSync(image.path));
 
     const prompt = `Generate a video ad for a product named ${productName} with the following description: ${productDescription}. The video should be approximately ${targetLength} seconds long and should be in ${aspectRatio} aspect ratio. Use the following user prompt for inspiration: ${userPrompt}. Use the following images as references. The video should be engaging and visually appealing, showcasing the product in the best possible way. Please ensure that the video is suitable for social media platforms and adheres to community guidelines. Match lighting, shadows and perspective of the images.`;
 
